@@ -65,16 +65,18 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/api/login/").permitAll();
         http.authorizeRequests().antMatchers("/api/posts/").permitAll();
         http.authorizeRequests().antMatchers("/api/posts/**").permitAll();
-//        http.authorizeRequests().antMatchers("/api/categories/").permitAll();
+        http.authorizeRequests().antMatchers("/api/landlordposts/").permitAll();
+        http.authorizeRequests().antMatchers("/api/landlordposts/**").permitAll();
         http.authorizeRequests().antMatchers("/api/users/").permitAll();
+//        http.authorizeRequests().antMatchers("/api/users/**").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/**/comments/").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/**/landlordpost/").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/**/tenantpost/").permitAll();
         http.antMatcher("/api/**").httpBasic().authenticationEntryPoint(restServicesEntryPoint()).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/api/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_LANDLORD')")
-                .antMatchers(HttpMethod.POST, "/api/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_LANDLORD')")
-                .antMatchers(HttpMethod.DELETE, "/api/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_LANDLORD')").and()
+                .antMatchers(HttpMethod.GET, "/api/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_LANDLORD') or hasRole('ROLE_TENANT')")
+                .antMatchers(HttpMethod.POST, "/api/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_LANDLORD') or hasRole('ROLE_TENANT')") 
+                .antMatchers(HttpMethod.DELETE, "/api/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_LANDLORD') or hasRole('ROLE_TENANT')").and()
                 .addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler());
     }

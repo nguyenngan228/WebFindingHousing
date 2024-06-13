@@ -15,4 +15,5 @@ import java.util.Map;
 public interface LandlordRepository {
     List<Landlordpost> getLandlordPost(Map<String, String> params);
     Landlordpost addLandlordPost(Landlordpost post);
+    Landlordpost getPostById(int id);
 }

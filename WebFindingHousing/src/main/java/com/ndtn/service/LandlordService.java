@@ -16,6 +16,6 @@ import java.util.Map;
  */
 public interface LandlordService {
     List<Landlordpost> getLandlordPost(Map<String, String> params);
-//    void addLandlordPost(Landlordpost post);
     Landlordpost addLandlordPost(Post post,Room room);
+    Landlordpost getPostById(int id);
 }

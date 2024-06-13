@@ -100,23 +100,6 @@ public class LandlordRepositoryImpl implements LandlordRepository {
         List<Landlordpost> posts = query.getResultList();
 
         return posts;
-//        Session s = this.factory.getObject().getCurrentSession();
-//        CriteriaBuilder b = s.getCriteriaBuilder();
-//        CriteriaQuery<Landlordpost> q = b.createQuery(Landlordpost.class);
-//        Root r = q.from(Landlordpost.class);
-//        q.select(r);
-//
-//        List<Predicate> predicates = new ArrayList<>();
-//
-//        q.where(predicates.toArray(Predicate[]::new));
-//        q.orderBy(b.desc(r.get("id")));
-//
-//        Query query = s.createQuery(q);
-//        
-//        
-//        List<Landlordpost> p = query.getResultList();
-//
-//        return p;
     }
 
     @Override
@@ -124,6 +107,14 @@ public class LandlordRepositoryImpl implements LandlordRepository {
         Session s = this.factory.getObject().getCurrentSession();
         s.save(post);
         return post;
+    }
+
+    @Override
+    public Landlordpost getPostById(int id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createQuery("FROM Landlordpost WHERE id=:id");
+        q.setParameter("id", id);
+        return (Landlordpost) q.getSingleResult();
     }
 
 }

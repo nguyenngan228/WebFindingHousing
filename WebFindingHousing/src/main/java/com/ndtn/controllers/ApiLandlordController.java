@@ -4,11 +4,9 @@
  */
 package com.ndtn.controllers;
 
-import com.ndtn.pojo.Image;
 import com.ndtn.pojo.Landlordpost;
 import com.ndtn.pojo.Post;
 import com.ndtn.pojo.Room;
-import com.ndtn.pojo.User;
 import com.ndtn.service.ImageService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,11 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.ndtn.service.LandlordService;
 import com.ndtn.service.PostService;
 import com.ndtn.service.RoomService;
-import com.ndtn.service.UserService;
-import java.math.BigDecimal;
-import java.security.Principal;
-import java.util.Date;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,13 +43,18 @@ public class ApiLandlordController {
     private RoomService roomService;
     @Autowired
     private ImageService imgService;
-    @Autowired
-    private UserService userService;
 
-    @GetMapping("/landlordpost/")
+    @GetMapping("/landlordposts/")
     @CrossOrigin
     public ResponseEntity<List<Landlordpost>> list(@RequestParam Map<String, String> params) {
         return new ResponseEntity<>(this.landlordPostService.getLandlordPost(params), HttpStatus.OK);
+    }
+    
+    
+    
+    @GetMapping(path = "/landlordposts/{landlordpostId}/", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Landlordpost> retrieve(@PathVariable(value = "landlordpostId") int id) {
+        return new ResponseEntity<>(this.landlordPostService.getPostById(id), HttpStatus.OK); 
     }
 
     
@@ -78,6 +78,9 @@ public class ApiLandlordController {
 
         return new ResponseEntity<>(landlordPost, HttpStatus.CREATED);
     }
+    
+    
+    
 
 
 }

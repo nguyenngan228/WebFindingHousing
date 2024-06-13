@@ -74,6 +74,7 @@ public class Room implements Serializable {
     private Set<Image> imageSet;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
+    @JsonIgnore
     private User userId;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "roomId")
     @JsonIgnore

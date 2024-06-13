@@ -5,6 +5,7 @@
 package com.ndtn.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -75,6 +76,7 @@ public class User implements Serializable {
     @Column(name = "is_active")
     private Boolean isActive;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "userId")
+//    @JsonProperty("landlord")
     private Landlord landlord;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "followerId")
     @JsonIgnore

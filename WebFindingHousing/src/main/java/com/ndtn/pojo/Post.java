@@ -5,6 +5,7 @@
 package com.ndtn.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -73,7 +74,7 @@ public class Post implements Serializable {
     private Landlordpost landlordpost;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    @JsonIgnore
+    @JsonProperty("user")
     private User userId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId")
     @JsonIgnore

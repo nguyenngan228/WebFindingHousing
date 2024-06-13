@@ -35,13 +35,13 @@ public class ApiPostController {
 
     @Autowired
     private PostService postService;
-    @Autowired
-    private UserService userService;
 
     @GetMapping("/posts")
     public ResponseEntity<List<Post>> list(@RequestParam Map<String, String> params) {
         return new ResponseEntity<>(this.postService.getPost(params), HttpStatus.OK);
     }
+    
+    
     @GetMapping(path = "/posts/{postsId}/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Post> retrieve(@PathVariable(value = "postsId") int id) {
         return new ResponseEntity<>(this.postService.getPostById(id), HttpStatus.OK); 
