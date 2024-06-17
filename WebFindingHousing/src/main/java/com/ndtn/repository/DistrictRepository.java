@@ -4,8 +4,7 @@
  */
 package com.ndtn.repository;
 
-import com.ndtn.pojo.Landlord;
-import com.ndtn.pojo.Landlordpost;
+import com.ndtn.pojo.District;
 import java.util.List;
 import java.util.Map;
 
@@ -13,9 +12,7 @@ import java.util.Map;
  *
  * @author thanh
  */
-public interface LandlordRepository {
-    List<Landlordpost> getLandlordPost(Map<String, String> params);
-    Landlordpost addLandlordPost(Landlordpost post);
-    Landlordpost getPostById(int id);
-    Landlord addLandlord(Landlord landlord);
+public interface DistrictRepository {
+    List<District> getDistrict(Map<String, String> params);
+    District getDistrictById(int id);
 }

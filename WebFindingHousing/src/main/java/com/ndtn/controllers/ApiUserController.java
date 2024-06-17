@@ -47,26 +47,32 @@ public class ApiUserController {
     })
     @ResponseStatus(HttpStatus.CREATED)
     @CrossOrigin
-    public void create(@RequestParam Map<String, String> params, @RequestPart MultipartFile[] file) {
-        String role = params.get("role");
-        User u = new User();
-        u.setUsername(params.get("username"));
-        u.setEmail(params.get("email"));
-        String password = params.get("password");
-        u.setPassword(this.passswordEncoder.encode(password));
-        if (role.equals("landlord")) {
-            u.setRole("ROLE_LANDLORD");
-        } else if (role.equals("tenant")) {
-            u.setRole("ROLE_TENANT");
-        }
-
-        u.setIsActive(true);
-        if (file.length > 0) {
-            u.setFile(file[0]);
-        }
-
-        this.userService.addUser(u);
+    public ResponseEntity<User> addUser(@RequestParam Map<String, String> params,@RequestPart MultipartFile file) {
+        User u = this.userService.addUser(params,file);
+        return new ResponseEntity<>(u, HttpStatus.CREATED);
     }
+//    public void create(@RequestParam Map<String, String> params, @RequestPart MultipartFile[] file) {
+        
+//        String role = params.get("role");
+//        User u = new User();
+//        u.setUsername(params.get("username"));
+//        u.setEmail(params.get("email"));
+//        String password = params.get("password");
+//        u.setPassword(this.passswordEncoder.encode(password));
+//        if (role.equals("landlord")) {
+//            u.setRole("ROLE_LANDLORD");
+//        } else if (role.equals("tenant")) {
+//            u.setRole("ROLE_TENANT");
+//        }
+//
+//        u.setIsActive(true);
+//        if (file.length > 0) {
+//            u.setFile(file[0]);
+//        }
+//
+//        this.userService.addUser(u);
+          
+//    }
 
     @PostMapping("/login/")
     @CrossOrigin
@@ -93,5 +99,8 @@ public class ApiUserController {
         User u = this.userService.getUserById(id);
         return new ResponseEntity<>(u, HttpStatus.OK);
     }
+    
+    
+    
 
 }

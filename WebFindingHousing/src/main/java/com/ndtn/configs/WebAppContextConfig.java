@@ -5,6 +5,7 @@
 package com.ndtn.configs;
 
 import com.ndtn.formatters.RoomFormatter;
+import com.ndtn.formatters.TypeImageFormatter;
 import com.ndtn.formatters.UserFormatter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -48,6 +49,7 @@ public class WebAppContextConfig implements WebMvcConfigurer{
     public void addFormatters(FormatterRegistry registry) {
         registry.addFormatter(new RoomFormatter());
         registry.addFormatter(new UserFormatter());
+        registry.addFormatter(new TypeImageFormatter());
     }
     
    

@@ -4,14 +4,15 @@
  */
 package com.ndtn.service;
 
-import com.ndtn.pojo.Image;
-import com.ndtn.pojo.Room;
+import com.ndtn.pojo.Imageprofile;
+import com.ndtn.pojo.Typeimage;
+import com.ndtn.pojo.User;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
  * @author thanh
  */
-public interface ImageService {
-    Image addImage(Room room, MultipartFile file);
+public interface ImageProfileService {
+    Imageprofile addImage(User user,MultipartFile file, Typeimage typeId);
 }

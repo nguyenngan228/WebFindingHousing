@@ -20,29 +20,35 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
  * @author thanh
  */
 @Service("userDetailsService")
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
+
     @Autowired
     private UserRepository userRepo;
     @Autowired
     private Cloudinary cloudinary;
+    @Autowired
+    private BCryptPasswordEncoder passswordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User u = this.userRepo.getUserByUsername(username);
-        if(u == null)
+        if (u == null) {
             throw new UsernameNotFoundException("Invalid");
+        }
         Set<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority(u.getRole()));
-         
+
         return new org.springframework.security.core.userdetails.User(u.getUsername(), u.getPassword(), authorities);
-        
+
     }
 
     @Override
@@ -55,23 +61,38 @@ public class UserServiceImpl implements UserService{
         return this.userRepo.authUser(username, password);
     }
 
-    @Override
-    public void addUser(User user) {
-        if (!user.getFile().isEmpty()) {
-            try {
-                Map res = this.cloudinary.uploader().upload(user.getFile().getBytes(), ObjectUtils.asMap("resource_type", "auto"));
-                user.setAvatar(res.get("secure_url").toString());
-            } catch (IOException ex) {
-                Logger.getLogger(UserServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
-        this.userRepo.addUser(user);
-    }
 
     @Override
     public User getUserById(int id) {
         return this.userRepo.getUserById(id);
     }
-    
+
+    @Override
+    public User addUser(Map<String, String> params, MultipartFile file) {
+        String role = params.get("role");
+        User u = new User();
+        u.setUsername(params.get("username"));
+        u.setEmail(params.get("email"));
+        String password = params.get("password");
+        u.setPassword(this.passswordEncoder.encode(password));
+        if (role.equals("landlord")) {
+            u.setRole("ROLE_LANDLORD");
+        } else if (role.equals("tenant")) {
+            u.setRole("ROLE_TENANT");
+        }
+        u.setIsActive(true);
+        if (!file.isEmpty()) {
+            try {
+                Map res = this.cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+                u.setAvatar(res.get("secure_url").toString());
+            } catch (IOException ex) {
+                Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return this.userRepo.addUser(u);
+    }
+
+   
+
 }

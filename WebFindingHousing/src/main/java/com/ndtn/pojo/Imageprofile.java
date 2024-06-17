@@ -6,6 +6,7 @@ package com.ndtn.pojo;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,9 +17,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -48,8 +51,12 @@ public class Imageprofile implements Serializable {
     @ManyToOne(optional = false)
     private Typeimage typeId;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     private User userId;
+    @Transient
+    private MultipartFile imageRow;
+    @Transient
+    private MultipartFile imageRoom;
 
     public Imageprofile() {
     }
@@ -118,6 +125,34 @@ public class Imageprofile implements Serializable {
     @Override
     public String toString() {
         return "com.ndtn.pojo.Imageprofile[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the imageRow
+     */
+    public MultipartFile getImageRow() {
+        return imageRow;
+    }
+
+    /**
+     * @param imageRow the imageRow to set
+     */
+    public void setImageRow(MultipartFile imageRow) {
+        this.imageRow = imageRow;
+    }
+
+    /**
+     * @return the imageRoom
+     */
+    public MultipartFile getImageRoom() {
+        return imageRoom;
+    }
+
+    /**
+     * @param imageRoom the imageRoom to set
+     */
+    public void setImageRoom(MultipartFile imageRoom) {
+        this.imageRoom = imageRoom;
     }
     
 }

@@ -40,11 +40,11 @@ public class UserRepositoryImpl implements UserRepository{
         return this.passEncoder.matches(password, u.getPassword());
     }
 
-    @Override
-    public void addUser(User user) {
-        Session s =this.factory.getObject().getCurrentSession();
-        s.save(user);
-    }
+//    @Override
+//    public void addUser(User user) {
+//        Session s =this.factory.getObject().getCurrentSession();
+//        s.save(user);
+//    }
 
     @Override
     public User getUserById(int id) {
@@ -52,6 +52,13 @@ public class UserRepositoryImpl implements UserRepository{
         Query q = s.createQuery("FROM User WHERE id=:id");
         q.setParameter("id", id);
         return (User) q.getSingleResult();
+    }
+
+    @Override
+    public User addUser(User user) {
+        Session s =this.factory.getObject().getCurrentSession();
+        s.save(user);
+        return user;
     }
     
 } 

@@ -4,6 +4,7 @@
  */
 package com.ndtn.repository.impl;
 
+import com.ndtn.pojo.Landlord;
 import com.ndtn.pojo.Landlordpost;
 import com.ndtn.pojo.Room;
 import java.util.ArrayList;
@@ -115,6 +116,13 @@ public class LandlordRepositoryImpl implements LandlordRepository {
         Query q = s.createQuery("FROM Landlordpost WHERE id=:id");
         q.setParameter("id", id);
         return (Landlordpost) q.getSingleResult();
+    }
+
+    @Override
+    public Landlord addLandlord(Landlord landlord) {
+        Session s = this.factory.getObject().getCurrentSession();
+        s.save(landlord);
+        return landlord;
     }
 
 }

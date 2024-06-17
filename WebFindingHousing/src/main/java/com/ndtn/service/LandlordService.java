@@ -4,9 +4,11 @@
  */
 package com.ndtn.service;
 
+import com.ndtn.pojo.Landlord;
 import com.ndtn.pojo.Landlordpost;
 import com.ndtn.pojo.Post;
 import com.ndtn.pojo.Room;
+import com.ndtn.pojo.User;
 import java.util.List;
 import java.util.Map;
 
@@ -18,4 +20,5 @@ public interface LandlordService {
     List<Landlordpost> getLandlordPost(Map<String, String> params);
     Landlordpost addLandlordPost(Post post,Room room);
     Landlordpost getPostById(int id);
+    Landlord addLandlord(User user,Map<String,String> params);
 }

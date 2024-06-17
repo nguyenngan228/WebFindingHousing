@@ -34,7 +34,6 @@ public class RoomServiceImpl implements RoomService{
     public Room addRoom(Map<String, String> params) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = this.userRepo.getUserByUsername(authentication.getName());
-//        User user = userService.getUserByUsername(principal.getName());
         Room u = new Room();
         u.setUserId(user);
         u.setName(params.get("name"));
@@ -44,13 +43,6 @@ public class RoomServiceImpl implements RoomService{
         u.setLatitude(BigDecimal.valueOf(Long.parseLong(params.get("latitude"))));
         u.setLongitude(BigDecimal.valueOf(Long.parseLong(params.get("longitude"))));
         return this.roomRepo.addRoom(u);
-
-//        for (MultipartFile f : file) {
-//            Image img = new Image();
-//            img.setRoomId(u);
-//            img.setFile(f);
-//            imgService.addImage(img);
-//        }
     }
 
     

@@ -4,6 +4,7 @@
  */
 package com.ndtn.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -46,6 +47,7 @@ public class Wards implements Serializable {
     private String name;
     @JoinColumn(name = "district_id", referencedColumnName = "district_id")
     @ManyToOne(optional = false)
+    @JsonIgnore
     private District districtId;
 
     public Wards() {

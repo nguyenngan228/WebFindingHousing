@@ -4,14 +4,15 @@
  */
 package com.ndtn.service;
 
-import com.ndtn.pojo.Image;
-import com.ndtn.pojo.Room;
-import org.springframework.web.multipart.MultipartFile;
+import com.ndtn.pojo.District;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
  * @author thanh
  */
-public interface ImageService {
-    Image addImage(Room room, MultipartFile file);
+public interface DistrictService {
+    List<District> getDistrict(Map<String, String> params);
+    District getDistrictById(int id);
 }
