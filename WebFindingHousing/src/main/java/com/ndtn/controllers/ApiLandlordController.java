@@ -67,6 +67,7 @@ public class ApiLandlordController {
     }
 
     @GetMapping(path = "/landlordposts/{landlordpostId}/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin
     public ResponseEntity<Landlordpost> retrieve(@PathVariable(value = "landlordpostId") int id) {
         return new ResponseEntity<>(this.landlordPostService.getPostById(id), HttpStatus.OK);
     }
@@ -113,6 +114,12 @@ public class ApiLandlordController {
         }
         
         return new ResponseEntity<>(landlord, HttpStatus.CREATED);
+    }
+    
+    @GetMapping(path = "/landlordposts/{userId}/landlord/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin
+    public ResponseEntity<List<Landlordpost>> getPostByUserId(@PathVariable(value = "userId") int id) {
+        return new ResponseEntity<>(this.landlordService.getPostByUserId(id), HttpStatus.OK);
     }
 
 }

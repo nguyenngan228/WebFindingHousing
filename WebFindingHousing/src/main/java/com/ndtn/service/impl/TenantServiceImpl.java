@@ -38,5 +38,15 @@ public class TenantServiceImpl implements TenantService{
         p.setLongitude(BigDecimal.valueOf(Long.parseLong(params.get("longitude"))));
         return this.tenantRepo.addPost(p);
     }
+
+    @Override
+    public Tenantpost getPostById(int id) {
+        return this.tenantRepo.getPostById(id);
+    }
+
+    @Override
+    public List<Tenantpost> getPostByUserId(int id) {
+        return this.tenantRepo.getPostByUserId(id);
+    }
     
 }

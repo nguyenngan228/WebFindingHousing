@@ -21,4 +21,5 @@ public interface LandlordService {
     Landlordpost addLandlordPost(Post post,Room room);
     Landlordpost getPostById(int id);
     Landlord addLandlord(User user,Map<String,String> params);
+    List<Landlordpost> getPostByUserId(int id);
 }

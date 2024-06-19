@@ -5,6 +5,7 @@
 package com.ndtn.repository.impl;
 
 
+import com.ndtn.pojo.Post;
 import com.ndtn.pojo.Tenantpost;
 import com.ndtn.repository.TenantRepository;
 import java.util.ArrayList;
@@ -12,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.hibernate.Session;
@@ -70,6 +73,32 @@ public class TenantRepositoryImpl implements TenantRepository{
         Session s = this.factory.getObject().getCurrentSession();
         s.save(post);
         return post;
+    }
+
+    @Override
+    public Tenantpost getPostById(int id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createQuery("FROM Tenantpost WHERE post_id=:id");
+        q.setParameter("id", id);
+        return (Tenantpost) q.getSingleResult();
+    }
+
+    @Override
+    public List<Tenantpost> getPostByUserId(int id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Tenantpost> q = b.createQuery(Tenantpost.class);
+        Root<Tenantpost> r = q.from(Tenantpost.class);
+        Join<Tenantpost, Post> postJoin = r.join("postId", JoinType.INNER);
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(b.equal(postJoin.get("userId"), id));
+        q.where(predicates.toArray(new Predicate[0]));
+        q.orderBy(b.desc(r.get("id")));
+
+        Query query = s.createQuery(q);
+
+        List<Tenantpost> posts = query.getResultList();
+        return posts;
     }
 
     

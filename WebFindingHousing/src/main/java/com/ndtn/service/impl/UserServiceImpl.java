@@ -77,8 +77,10 @@ public class UserServiceImpl implements UserService {
         u.setPassword(this.passswordEncoder.encode(password));
         if (role.equals("landlord")) {
             u.setRole("ROLE_LANDLORD");
+            u.setIsActive(Boolean.FALSE);
         } else if (role.equals("tenant")) {
             u.setRole("ROLE_TENANT");
+            u.setIsActive(Boolean.TRUE);
         }
         u.setIsActive(true);
         if (!file.isEmpty()) {

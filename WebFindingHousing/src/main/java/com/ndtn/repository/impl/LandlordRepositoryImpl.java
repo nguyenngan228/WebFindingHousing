@@ -6,6 +6,7 @@ package com.ndtn.repository.impl;
 
 import com.ndtn.pojo.Landlord;
 import com.ndtn.pojo.Landlordpost;
+import com.ndtn.pojo.Post;
 import com.ndtn.pojo.Room;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +57,7 @@ public class LandlordRepositoryImpl implements LandlordRepository {
                     b.equal(roomJoin.get("maxOccupants"), Integer.valueOf(maxOccupants))
             );
         }
-        
+
         String price = params.get("price");
         if (price != null && !price.isEmpty()) {
             predicates.add(
@@ -81,7 +82,6 @@ public class LandlordRepositoryImpl implements LandlordRepository {
                     b.equal(roomJoin.get("wards"), String.format("%%%s%%", wards))
             );
         }
-        
 
         String fromPrice = params.get("fromPrice");
         if (fromPrice != null && !fromPrice.isEmpty()) {
@@ -113,7 +113,7 @@ public class LandlordRepositoryImpl implements LandlordRepository {
     @Override
     public Landlordpost getPostById(int id) {
         Session s = this.factory.getObject().getCurrentSession();
-        Query q = s.createQuery("FROM Landlordpost WHERE id=:id");
+        Query q = s.createQuery("FROM Landlordpost WHERE post_id=:id");
         q.setParameter("id", id);
         return (Landlordpost) q.getSingleResult();
     }
@@ -123,6 +123,25 @@ public class LandlordRepositoryImpl implements LandlordRepository {
         Session s = this.factory.getObject().getCurrentSession();
         s.save(landlord);
         return landlord;
+    }
+
+    @Override
+    public List<Landlordpost> getPostByUserId(int id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Landlordpost> q = b.createQuery(Landlordpost.class);
+        Root<Landlordpost> r = q.from(Landlordpost.class);
+        Join<Landlordpost, Room> roomJoin = r.join("roomId", JoinType.INNER);
+        Join<Landlordpost, Post> postJoin = r.join("postId", JoinType.INNER);
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(b.equal(postJoin.get("userId"), id));
+        q.where(predicates.toArray(new Predicate[0]));
+        q.orderBy(b.desc(r.get("id")));
+
+        Query query = s.createQuery(q);
+
+        List<Landlordpost> posts = query.getResultList();
+        return posts;
     }
 
 }

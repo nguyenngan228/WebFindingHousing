@@ -5,6 +5,7 @@
 package com.ndtn.repository;
 
 import com.ndtn.pojo.Image;
+import java.util.List;
 
 /**
  *
@@ -12,4 +13,5 @@ import com.ndtn.pojo.Image;
  */
 public interface ImageRepository {
     Image addImage(Image img);
+    List<Image> getImages(int roomId);
 }

@@ -11,7 +11,6 @@ import com.ndtn.pojo.Post;
 import com.ndtn.pojo.Province;
 import com.ndtn.pojo.Room;
 import com.ndtn.pojo.User;
-import com.ndtn.pojo.Wards;
 import com.ndtn.repository.DistrictRepository;
 import java.util.List;
 import java.util.Map;
@@ -72,6 +71,11 @@ public class LandlordServiceImpl implements LandlordService {
         landlord.setWard(2);
         landlord.setDistrict(district);
         return this.landlordRepo.addLandlord(landlord);
+    }
+
+    @Override
+    public List<Landlordpost> getPostByUserId(int id) {
+        return this.landlordRepo.getPostByUserId(id);
     }
 
 }

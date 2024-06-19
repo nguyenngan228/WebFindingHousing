@@ -15,4 +15,6 @@ import java.util.Map;
 public interface TenantRepository {
     List<Tenantpost> getPost(Map<String,String> params);
     Tenantpost addPost(Tenantpost post);
+    Tenantpost getPostById(int id);
+    List<Tenantpost> getPostByUserId(int id);
 }

@@ -4,9 +4,15 @@
  */
 package com.ndtn.repository.impl;
 
+
 import com.ndtn.pojo.Image;
 import com.ndtn.repository.ImageRepository;
+import java.util.List;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
@@ -28,6 +34,20 @@ public class ImageRepositoryImpl implements ImageRepository {
         Session s = this.factory.getObject().getCurrentSession();
         s.save(img);
         return img;
+    }
+
+    @Override
+    public List<Image> getImages(int roomId) {
+        Session session = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = session.getCriteriaBuilder();
+        CriteriaQuery<Image> q = b.createQuery(Image.class);
+        Root root = q.from(Image.class);
+        q.select(root);
+
+        q.where(b.equal(root.get("roomId"), roomId));
+
+        Query query = session.createQuery(q);
+        return query.getResultList();
     }
     
 

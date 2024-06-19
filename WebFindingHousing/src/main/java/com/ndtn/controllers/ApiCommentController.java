@@ -46,7 +46,7 @@ public class ApiCommentController {
         return new ResponseEntity<>(comment, HttpStatus.CREATED);
     }
     
-    @GetMapping("/posts/{postId}/comments/")
+    @GetMapping("/posts/{postId}/getcomments/")
     @CrossOrigin
     public ResponseEntity<List<Comment>> getComments(@PathVariable("postId")int postId){
         return new ResponseEntity<>(this.cmtService.getComments(postId),HttpStatus.OK);

@@ -18,4 +18,5 @@ public interface LandlordRepository {
     Landlordpost addLandlordPost(Landlordpost post);
     Landlordpost getPostById(int id);
     Landlord addLandlord(Landlord landlord);
+    List<Landlordpost> getPostByUserId(int id);
 }

@@ -11,6 +11,7 @@ import com.ndtn.pojo.Room;
 import com.ndtn.repository.ImageRepository;
 import com.ndtn.service.ImageService;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -75,6 +76,11 @@ public class ImageServiceImpl implements ImageService{
             }
         }
         return this.imgRepo.addImage(image);
+    }
+
+    @Override
+    public List<Image> getImages(int roomId) {
+        return this.imgRepo.getImages(roomId);
     }
     
 }

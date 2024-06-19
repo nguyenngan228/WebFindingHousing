@@ -6,6 +6,7 @@ package com.ndtn.service;
 
 import com.ndtn.pojo.Image;
 import com.ndtn.pojo.Room;
+import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -14,4 +15,5 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface ImageService {
     Image addImage(Room room, MultipartFile file);
+    List<Image> getImages(int roomId);
 }
