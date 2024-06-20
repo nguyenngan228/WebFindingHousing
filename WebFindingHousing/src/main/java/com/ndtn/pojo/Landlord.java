@@ -13,7 +13,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
@@ -32,10 +31,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Landlord.findAll", query = "SELECT l FROM Landlord l"),
     @NamedQuery(name = "Landlord.findById", query = "SELECT l FROM Landlord l WHERE l.id = :id"),
-    @NamedQuery(name = "Landlord.findByFullName", query = "SELECT l FROM Landlord l WHERE l.fullName = :fullName"),
     @NamedQuery(name = "Landlord.findByPhoneNumber", query = "SELECT l FROM Landlord l WHERE l.phoneNumber = :phoneNumber"),
-    @NamedQuery(name = "Landlord.findByWard", query = "SELECT l FROM Landlord l WHERE l.ward = :ward"),
-    @NamedQuery(name = "Landlord.findByStreet", query = "SELECT l FROM Landlord l WHERE l.street = :street")})
+    @NamedQuery(name = "Landlord.findByAddress", query = "SELECT l FROM Landlord l WHERE l.address = :address")})
 public class Landlord implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,23 +43,14 @@ public class Landlord implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 100)
-    @Column(name = "full_name")
-    private String fullName;
-    @Size(max = 15)
+    @Size(min = 1, max = 15)
     @Column(name = "phone_number")
     private String phoneNumber;
-    @Column(name = "ward")
-    private Integer ward;
-    @Size(max = 255)
-    @Column(name = "street")
-    private String street;
-    @JoinColumn(name = "district", referencedColumnName = "district_id")
-    @ManyToOne
-    private District district;
-    @JoinColumn(name = "province", referencedColumnName = "province_id")
-    @ManyToOne
-    private Province province;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
+    @Column(name = "address")
+    private String address;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @OneToOne(optional = false)
     @JsonIgnore
@@ -75,9 +63,10 @@ public class Landlord implements Serializable {
         this.id = id;
     }
 
-    public Landlord(Integer id, String fullName) {
+    public Landlord(Integer id, String phoneNumber, String address) {
         this.id = id;
-        this.fullName = fullName;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
     }
 
     public Integer getId() {
@@ -88,14 +77,6 @@ public class Landlord implements Serializable {
         this.id = id;
     }
 
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -104,36 +85,12 @@ public class Landlord implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
-    public Integer getWard() {
-        return ward;
+    public String getAddress() {
+        return address;
     }
 
-    public void setWard(Integer ward) {
-        this.ward = ward;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public District getDistrict() {
-        return district;
-    }
-
-    public void setDistrict(District district) {
-        this.district = district;
-    }
-
-    public Province getProvince() {
-        return province;
-    }
-
-    public void setProvince(Province province) {
-        this.province = province;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public User getUserId() {

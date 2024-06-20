@@ -72,8 +72,9 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/api/wards/").permitAll();
         http.authorizeRequests().antMatchers("/api/rooms/**").permitAll();
         http.authorizeRequests().antMatchers("/api/users/**").permitAll();
-        http.authorizeRequests().antMatchers("/api/landlord_create/");
-                
+        http.authorizeRequests().antMatchers("/api/landlord_create/").permitAll();
+        http.authorizeRequests().antMatchers("/api/tenantpost/**").permitAll();
+
 //        http.authorizeRequests().antMatchers("/api/users/**").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/**/comments/").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/**/landlordpost/").permitAll();
@@ -81,7 +82,7 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
         http.antMatcher("/api/**").httpBasic().authenticationEntryPoint(restServicesEntryPoint()).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_LANDLORD') or hasRole('ROLE_TENANT')")
-                .antMatchers(HttpMethod.POST, "/api/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_LANDLORD') or hasRole('ROLE_TENANT')") 
+                .antMatchers(HttpMethod.POST, "/api/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_LANDLORD') or hasRole('ROLE_TENANT')")
                 .antMatchers(HttpMethod.DELETE, "/api/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_LANDLORD') or hasRole('ROLE_TENANT')").and()
                 .addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler());

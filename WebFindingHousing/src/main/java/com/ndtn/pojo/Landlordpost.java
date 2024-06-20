@@ -4,7 +4,6 @@
  */
 package com.ndtn.pojo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import javax.persistence.Basic;
@@ -18,10 +17,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -49,9 +45,6 @@ public class Landlordpost implements Serializable {
     @OneToOne(optional = false)
     @JsonProperty("room")
     private Room roomId;
-    
-    @Transient
-    private MultipartFile file;
 
     public Landlordpost() {
     }
@@ -107,21 +100,6 @@ public class Landlordpost implements Serializable {
     @Override
     public String toString() {
         return "com.ndtn.pojo.Landlordpost[ id=" + id + " ]";
-    }
-
-    /**
-     * @return the file
-     */
-    @XmlTransient
-    public MultipartFile getFile() {
-        return file;
-    }
-
-    /**
-     * @param file the file to set
-     */
-    public void setFile(MultipartFile file) {
-        this.file = file;
     }
     
 }

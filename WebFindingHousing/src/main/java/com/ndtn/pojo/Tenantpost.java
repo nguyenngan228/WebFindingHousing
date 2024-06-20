@@ -6,7 +6,6 @@ package com.ndtn.pojo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +17,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -33,7 +33,12 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Tenantpost.findById", query = "SELECT t FROM Tenantpost t WHERE t.id = :id"),
     @NamedQuery(name = "Tenantpost.findByAddress", query = "SELECT t FROM Tenantpost t WHERE t.address = :address"),
     @NamedQuery(name = "Tenantpost.findByLatitude", query = "SELECT t FROM Tenantpost t WHERE t.latitude = :latitude"),
-    @NamedQuery(name = "Tenantpost.findByLongitude", query = "SELECT t FROM Tenantpost t WHERE t.longitude = :longitude")})
+    @NamedQuery(name = "Tenantpost.findByLongitude", query = "SELECT t FROM Tenantpost t WHERE t.longitude = :longitude"),
+    @NamedQuery(name = "Tenantpost.findByScope", query = "SELECT t FROM Tenantpost t WHERE t.scope = :scope"),
+    @NamedQuery(name = "Tenantpost.findByArea", query = "SELECT t FROM Tenantpost t WHERE t.area = :area"),
+    @NamedQuery(name = "Tenantpost.findByMaxPrice", query = "SELECT t FROM Tenantpost t WHERE t.maxPrice = :maxPrice"),
+    @NamedQuery(name = "Tenantpost.findByMinPrice", query = "SELECT t FROM Tenantpost t WHERE t.minPrice = :minPrice"),
+    @NamedQuery(name = "Tenantpost.findByMaxOccupants", query = "SELECT t FROM Tenantpost t WHERE t.maxOccupants = :maxOccupants")})
 public class Tenantpost implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -42,14 +47,39 @@ public class Tenantpost implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Size(max = 255)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
     @Column(name = "address")
     private String address;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "latitude")
-    private BigDecimal latitude;
+    private long latitude;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "longitude")
-    private BigDecimal longitude;
+    private long longitude;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "scope")
+    private long scope;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "area")
+    private long area;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "max_price")
+    private long maxPrice;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "min_price")
+    private long minPrice;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "max_occupants")
+    private long maxOccupants;
     @JoinColumn(name = "post_id", referencedColumnName = "id")
     @OneToOne(optional = false)
     @JsonProperty("post")
@@ -60,6 +90,18 @@ public class Tenantpost implements Serializable {
 
     public Tenantpost(Integer id) {
         this.id = id;
+    }
+
+    public Tenantpost(Integer id, String address, long latitude, long longitude, long scope, long area, long maxPrice, long minPrice, long maxOccupants) {
+        this.id = id;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.scope = scope;
+        this.area = area;
+        this.maxPrice = maxPrice;
+        this.minPrice = minPrice;
+        this.maxOccupants = maxOccupants;
     }
 
     public Integer getId() {
@@ -78,20 +120,60 @@ public class Tenantpost implements Serializable {
         this.address = address;
     }
 
-    public BigDecimal getLatitude() {
+    public long getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(BigDecimal latitude) {
+    public void setLatitude(long latitude) {
         this.latitude = latitude;
     }
 
-    public BigDecimal getLongitude() {
+    public long getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(BigDecimal longitude) {
+    public void setLongitude(long longitude) {
         this.longitude = longitude;
+    }
+
+    public long getScope() {
+        return scope;
+    }
+
+    public void setScope(long scope) {
+        this.scope = scope;
+    }
+
+    public long getArea() {
+        return area;
+    }
+
+    public void setArea(long area) {
+        this.area = area;
+    }
+
+    public long getMaxPrice() {
+        return maxPrice;
+    }
+
+    public void setMaxPrice(long maxPrice) {
+        this.maxPrice = maxPrice;
+    }
+
+    public long getMinPrice() {
+        return minPrice;
+    }
+
+    public void setMinPrice(long minPrice) {
+        this.minPrice = minPrice;
+    }
+
+    public long getMaxOccupants() {
+        return maxOccupants;
+    }
+
+    public void setMaxOccupants(long maxOccupants) {
+        this.maxOccupants = maxOccupants;
     }
 
     public Post getPostId() {

@@ -18,4 +18,5 @@ public interface TenantService{
     Tenantpost addPost(Map<String, String> params,Post post);
     Tenantpost getPostById(int id);
     List<Tenantpost> getPostByUserId(int id);
+    boolean deletePostById(int id);
 }

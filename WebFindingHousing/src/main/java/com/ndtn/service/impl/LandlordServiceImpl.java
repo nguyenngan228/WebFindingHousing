@@ -4,22 +4,18 @@
  */
 package com.ndtn.service.impl;
 
-import com.ndtn.pojo.District;
+
 import com.ndtn.pojo.Landlord;
 import com.ndtn.pojo.Landlordpost;
 import com.ndtn.pojo.Post;
-import com.ndtn.pojo.Province;
 import com.ndtn.pojo.Room;
 import com.ndtn.pojo.User;
-import com.ndtn.repository.DistrictRepository;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ndtn.service.LandlordService;
 import com.ndtn.repository.LandlordRepository;
-import com.ndtn.repository.ProvineRepository;
-import com.ndtn.repository.WardsRepository;
 
 /**
  *
@@ -30,12 +26,7 @@ public class LandlordServiceImpl implements LandlordService {
 
     @Autowired
     private LandlordRepository landLordPostRepo;
-    @Autowired
-    private DistrictRepository districtRepo;
-    @Autowired
-    private WardsRepository wardsRepo;
-    @Autowired
-    private ProvineRepository provineRepo;
+
     @Autowired
     private LandlordRepository landlordRepo;
     
@@ -60,16 +51,11 @@ public class LandlordServiceImpl implements LandlordService {
 
     @Override
     public Landlord addLandlord(User user, Map<String, String> params) {
-        District district = districtRepo.getDistrictById(1);
-        Province province = provineRepo.getProvinceById(1);
+        
         Landlord landlord = new Landlord();
         landlord.setUserId(user);
-        landlord.setFullName(params.get("full_name"));
-        landlord.setStreet(params.get("street"));
+        landlord.setAddress(params.get("address"));
         landlord.setPhoneNumber(params.get("phone_number"));
-        landlord.setProvince(province);
-        landlord.setWard(2);
-        landlord.setDistrict(district);
         return this.landlordRepo.addLandlord(landlord);
     }
 

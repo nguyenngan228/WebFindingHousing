@@ -72,17 +72,17 @@ public class UserServiceImpl implements UserService {
         String role = params.get("role");
         User u = new User();
         u.setUsername(params.get("username"));
-        u.setEmail(params.get("email"));
         String password = params.get("password");
         u.setPassword(this.passswordEncoder.encode(password));
+        u.setFullName(params.get("full_name"));
+        u.setEmail(params.get("email"));
         if (role.equals("landlord")) {
             u.setRole("ROLE_LANDLORD");
-            u.setIsActive(Boolean.FALSE);
+            u.setIsActive(false);
         } else if (role.equals("tenant")) {
             u.setRole("ROLE_TENANT");
-            u.setIsActive(Boolean.TRUE);
+            u.setIsActive(true);
         }
-        u.setIsActive(true);
         if (!file.isEmpty()) {
             try {
                 Map res = this.cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type", "auto"));

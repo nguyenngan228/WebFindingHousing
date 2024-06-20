@@ -64,33 +64,11 @@ public class LandlordRepositoryImpl implements LandlordRepository {
                     b.equal(roomJoin.get("price"), Integer.valueOf(price))
             );
         }
-        String province = params.get("province");
-        if (province != null && !province.isEmpty()) {
+        String address = params.get("address");
+        if (address != null && !address.isEmpty()) {
             predicates.add(
-                    b.equal(roomJoin.get("province"), String.format("%%%s%%", province))
+                    b.like(roomJoin.get("address"), String.format("%%%s%%", address))
             );
-        }
-        String district = params.get("district");
-        if (district != null && !district.isEmpty()) {
-            predicates.add(
-                    b.equal(roomJoin.get("district"), String.format("%%%s%%", province))
-            );
-        }
-        String wards = params.get("wards");
-        if (wards != null && !wards.isEmpty()) {
-            predicates.add(
-                    b.equal(roomJoin.get("wards"), String.format("%%%s%%", wards))
-            );
-        }
-
-        String fromPrice = params.get("fromPrice");
-        if (fromPrice != null && !fromPrice.isEmpty()) {
-            predicates.add(b.greaterThanOrEqualTo(r.get("price"), Double.parseDouble(fromPrice)));
-        }
-
-        String toPrice = params.get("toPrice");
-        if (toPrice != null && !toPrice.isEmpty()) {
-            predicates.add(b.lessThanOrEqualTo(r.get("price"), Double.parseDouble(toPrice)));
         }
 
         q.where(predicates.toArray(new Predicate[0]));

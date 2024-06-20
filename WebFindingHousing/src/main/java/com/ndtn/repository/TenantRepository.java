@@ -17,4 +17,5 @@ public interface TenantRepository {
     Tenantpost addPost(Tenantpost post);
     Tenantpost getPostById(int id);
     List<Tenantpost> getPostByUserId(int id);
+    boolean deletePostById(int id);
 }

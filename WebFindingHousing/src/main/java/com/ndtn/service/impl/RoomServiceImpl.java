@@ -39,9 +39,11 @@ public class RoomServiceImpl implements RoomService{
         u.setName(params.get("name"));
         u.setAddress(params.get("address"));
         u.setMaxOccupants(Integer.parseInt(params.get("maxoccupants")));
-        u.setPrice(params.get("price"));
-        u.setLatitude(BigDecimal.valueOf(Long.parseLong(params.get("latitude"))));
-        u.setLongitude(BigDecimal.valueOf(Long.parseLong(params.get("longitude"))));
+        u.setPrice(Long.parseLong("price"));
+        u.setLatitude(Long.parseLong(params.get("latitude")));
+        u.setLongitude(Long.parseLong(params.get("longitude")));
+        u.setArea(Long.parseLong(params.get("area")));
+        
         return this.roomRepo.addRoom(u);
     }
 

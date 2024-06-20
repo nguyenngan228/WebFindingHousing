@@ -6,7 +6,6 @@ package com.ndtn.pojo;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -51,8 +50,9 @@ public class Imageprofile implements Serializable {
     @ManyToOne(optional = false)
     private Typeimage typeId;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     private User userId;
+    
     @Transient
     private MultipartFile imageRow;
     @Transient

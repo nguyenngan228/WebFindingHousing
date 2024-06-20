@@ -20,12 +20,13 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional
-public class UserRepositoryImpl implements UserRepository{
+public class UserRepositoryImpl implements UserRepository {
+
     @Autowired
     private LocalSessionFactoryBean factory;
-     @Autowired
+    @Autowired
     private BCryptPasswordEncoder passEncoder;
-    
+
     @Override
     public User getUserByUsername(String username) {
         Session s = this.factory.getObject().getCurrentSession();
@@ -34,18 +35,11 @@ public class UserRepositoryImpl implements UserRepository{
         return (User) q.getSingleResult();
     }
 
-    @Override
-    public boolean authUser(String username, String password) {
-        User  u = this.getUserByUsername(username);
-        return this.passEncoder.matches(password, u.getPassword());
-    }
-
 //    @Override
-//    public void addUser(User user) {
-//        Session s =this.factory.getObject().getCurrentSession();
-//        s.save(user);
+//    public boolean authUser(String username, String password) {
+//        User  u = this.getUserByUsername(username);
+//        return this.passEncoder.matches(password, u.getPassword());
 //    }
-
     @Override
     public User getUserById(int id) {
         Session s = this.factory.getObject().getCurrentSession();
@@ -56,9 +50,26 @@ public class UserRepositoryImpl implements UserRepository{
 
     @Override
     public User addUser(User user) {
-        Session s =this.factory.getObject().getCurrentSession();
+        Session s = this.factory.getObject().getCurrentSession();
         s.save(user);
         return user;
     }
-    
-} 
+
+    @Override
+    public boolean getActiveByUsername(String username) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createQuery("SELECT is_active FROM User WHERE username=:un");
+        q.setParameter("un", username);
+        return (Boolean) q.uniqueResult();
+    }
+
+    @Override
+    public boolean authUser(String username, String password) {
+        User u = this.getUserByUsername(username);
+        if (this.passEncoder.matches(password, u.getPassword()) == true && u.getIsActive() == true) {
+            return true;
+        }
+        return false;
+    }
+
+}

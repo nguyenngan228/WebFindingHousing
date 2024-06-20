@@ -4,10 +4,11 @@
  */
 package com.ndtn.repository.impl;
 
-
 import com.ndtn.pojo.Post;
 import com.ndtn.pojo.Tenantpost;
+import com.ndtn.pojo.User;
 import com.ndtn.repository.TenantRepository;
+import com.ndtn.service.UserService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,8 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,9 +33,12 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional
-public class TenantRepositoryImpl implements TenantRepository{
+public class TenantRepositoryImpl implements TenantRepository {
+
     @Autowired
     private LocalSessionFactoryBean factory;
+    @Autowired
+    private UserService userService;
 
     @Override
     public List<Tenantpost> getPost(Map<String, String> params) {
@@ -44,20 +50,27 @@ public class TenantRepositoryImpl implements TenantRepository{
 
         List<Predicate> predicates = new ArrayList<>();
 
-        String kw = params.get("kw");
-        if (kw != null && !kw.isEmpty()) {
-            predicates.add(b.like(r.get("name"), String.format("%%%s%%", kw)));
+        String maxOccupants = params.get("maxOccupants");
+        if (maxOccupants != null && !maxOccupants.isEmpty()) {
+            predicates.add(
+                    b.equal(r.get("maxOccupants"), Integer.valueOf(maxOccupants))
+            );
+        }
+        String address = params.get("address");
+        if (address != null && !address.isEmpty()) {
+            predicates.add(b.like(r.get("address"), String.format("%%%s%%", address)));
         }
 
-        String fromPrice = params.get("fromPrice");
-        if (fromPrice != null && !fromPrice.isEmpty()) {
-            predicates.add(b.greaterThanOrEqualTo(r.get("price"), Double.parseDouble(fromPrice)));
+        String minPrice = params.get("minPrice");
+        if (minPrice != null && !minPrice.isEmpty()) {
+            predicates.add(b.greaterThanOrEqualTo(r.get("minPrice"), Double.parseDouble(minPrice)));
         }
 
-        String toPrice = params.get("toPrice");
-        if (toPrice != null && !toPrice.isEmpty()) {
-            predicates.add(b.lessThanOrEqualTo(r.get("price"), Double.parseDouble(toPrice)));
+        String maxPrice = params.get("maxPrice");
+        if (maxPrice != null && !maxPrice.isEmpty()) {
+            predicates.add(b.lessThanOrEqualTo(r.get("maxPrice"), Double.parseDouble(maxPrice)));
         }
+        
 
         q.where(predicates.toArray(Predicate[]::new));
         q.orderBy(b.desc(r.get("id")));
@@ -69,7 +82,7 @@ public class TenantRepositoryImpl implements TenantRepository{
 
     @Override
     public Tenantpost addPost(Tenantpost post) {
-        
+
         Session s = this.factory.getObject().getCurrentSession();
         s.save(post);
         return post;
@@ -101,6 +114,22 @@ public class TenantRepositoryImpl implements TenantRepository{
         return posts;
     }
 
-    
-    
+    @Override
+    public boolean deletePostById(int id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createQuery("FROM Tenantpost tp WHERE tp.postId.userId.id = :userId AND tp.postId.id = :postId");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = this.userService.getUserByUsername(authentication.getName());
+        q.setParameter("userId", user.getId());
+        q.setParameter("postId", id);
+        Tenantpost tenantpost = (Tenantpost) q.uniqueResult();
+        if (tenantpost != null) {
+            s.delete(tenantpost);
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
 }

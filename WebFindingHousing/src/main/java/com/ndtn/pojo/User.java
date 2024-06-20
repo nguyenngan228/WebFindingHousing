@@ -5,7 +5,6 @@
 package com.ndtn.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -39,6 +38,7 @@ import org.springframework.web.multipart.MultipartFile;
     @NamedQuery(name = "User.findById", query = "SELECT u FROM User u WHERE u.id = :id"),
     @NamedQuery(name = "User.findByUsername", query = "SELECT u FROM User u WHERE u.username = :username"),
     @NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password"),
+    @NamedQuery(name = "User.findByFullName", query = "SELECT u FROM User u WHERE u.fullName = :fullName"),
     @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
     @NamedQuery(name = "User.findByAvatar", query = "SELECT u FROM User u WHERE u.avatar = :avatar"),
     @NamedQuery(name = "User.findByRole", query = "SELECT u FROM User u WHERE u.role = :role"),
@@ -61,23 +61,40 @@ public class User implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "password")
     private String password;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 100)
+    @Column(name = "full_name")
+    private String fullName;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
-    @Size(max = 100)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 100)
     @Column(name = "email")
     private String email;
-    @Size(max = 255)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
     @Column(name = "avatar")
     private String avatar;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 20)
+    @Size(min = 1, max = 13)
     @Column(name = "role")
     private String role;
     @Column(name = "is_active")
     private Boolean isActive;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    @JsonIgnore
+    private Set<Imageprofile> imageprofileSet;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "userId")
-//    @JsonProperty("landlord")
     private Landlord landlord;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    @JsonIgnore
+    private Set<Post> postSet;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    @JsonIgnore
+    private Set<Comment> commentSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "followerId")
     @JsonIgnore
     private Set<Follow> followSet;
@@ -87,19 +104,11 @@ public class User implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     @JsonIgnore
     private Set<Room> roomSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    @JsonIgnore
-    private Set<Imageprofile> imageprofileSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    @JsonIgnore
-    private Set<Post> postSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    @JsonIgnore
-    private Set<Comment> commentSet;
+    
     
     @Transient
     private MultipartFile file;
-
+    
     public User() {
     }
 
@@ -107,10 +116,13 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public User(Integer id, String username, String password, String role) {
+    public User(Integer id, String username, String password, String fullName, String email, String avatar, String role) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.fullName = fullName;
+        this.email = email;
+        this.avatar = avatar;
         this.role = role;
     }
 
@@ -136,6 +148,14 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getEmail() {
@@ -170,12 +190,39 @@ public class User implements Serializable {
         this.isActive = isActive;
     }
 
+    @XmlTransient
+    public Set<Imageprofile> getImageprofileSet() {
+        return imageprofileSet;
+    }
+
+    public void setImageprofileSet(Set<Imageprofile> imageprofileSet) {
+        this.imageprofileSet = imageprofileSet;
+    }
+
     public Landlord getLandlord() {
         return landlord;
     }
 
     public void setLandlord(Landlord landlord) {
         this.landlord = landlord;
+    }
+
+    @XmlTransient
+    public Set<Post> getPostSet() {
+        return postSet;
+    }
+
+    public void setPostSet(Set<Post> postSet) {
+        this.postSet = postSet;
+    }
+
+    @XmlTransient
+    public Set<Comment> getCommentSet() {
+        return commentSet;
+    }
+
+    public void setCommentSet(Set<Comment> commentSet) {
+        this.commentSet = commentSet;
     }
 
     @XmlTransient
@@ -203,33 +250,6 @@ public class User implements Serializable {
 
     public void setRoomSet(Set<Room> roomSet) {
         this.roomSet = roomSet;
-    }
-
-    @XmlTransient
-    public Set<Imageprofile> getImageprofileSet() {
-        return imageprofileSet;
-    }
-
-    public void setImageprofileSet(Set<Imageprofile> imageprofileSet) {
-        this.imageprofileSet = imageprofileSet;
-    }
-
-    @XmlTransient
-    public Set<Post> getPostSet() {
-        return postSet;
-    }
-
-    public void setPostSet(Set<Post> postSet) {
-        this.postSet = postSet;
-    }
-
-    @XmlTransient
-    public Set<Comment> getCommentSet() {
-        return commentSet;
-    }
-
-    public void setCommentSet(Set<Comment> commentSet) {
-        this.commentSet = commentSet;
     }
 
     @Override

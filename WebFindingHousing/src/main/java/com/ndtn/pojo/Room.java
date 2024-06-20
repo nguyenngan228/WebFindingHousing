@@ -6,7 +6,6 @@ package com.ndtn.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -42,7 +41,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Room.findByLatitude", query = "SELECT r FROM Room r WHERE r.latitude = :latitude"),
     @NamedQuery(name = "Room.findByLongitude", query = "SELECT r FROM Room r WHERE r.longitude = :longitude"),
     @NamedQuery(name = "Room.findByMaxOccupants", query = "SELECT r FROM Room r WHERE r.maxOccupants = :maxOccupants"),
-    @NamedQuery(name = "Room.findByPrice", query = "SELECT r FROM Room r WHERE r.price = :price")})
+    @NamedQuery(name = "Room.findByArea", query = "SELECT r FROM Room r WHERE r.area = :area"),
+    @NamedQuery(name = "Room.findByPrice", query = "SELECT r FROM Room r WHERE r.price = :price"),
+    @NamedQuery(name = "Room.findByUnitPrice", query = "SELECT r FROM Room r WHERE r.unitPrice = :unitPrice")})
 public class Room implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -56,29 +57,46 @@ public class Room implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "name")
     private String name;
-    @Size(max = 255)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
     @Column(name = "address")
     private String address;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "latitude")
-    private BigDecimal latitude;
+    private long latitude;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "longitude")
-    private BigDecimal longitude;
+    private long longitude;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "max_occupants")
-    private Integer maxOccupants;
-    @Size(max = 50)
+    private int maxOccupants;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "area")
+    private long area;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "price")
-    private String price;
+    private long price;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 7)
+    @Column(name = "unit_price")
+    private String unitPrice;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "roomId")
     @JsonIgnore
     private Set<Image> imageSet;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "roomId")
+    @JsonIgnore
+    private Landlordpost landlordpost;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     @JsonIgnore
     private User userId;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "roomId")
-    @JsonIgnore
-    private Landlordpost landlordpost;
 
     public Room() {
     }
@@ -87,9 +105,16 @@ public class Room implements Serializable {
         this.id = id;
     }
 
-    public Room(Integer id, String name) {
+    public Room(Integer id, String name, String address, long latitude, long longitude, int maxOccupants, long area, long price, String unitPrice) {
         this.id = id;
         this.name = name;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.maxOccupants = maxOccupants;
+        this.area = area;
+        this.price = price;
+        this.unitPrice = unitPrice;
     }
 
     public Integer getId() {
@@ -116,36 +141,52 @@ public class Room implements Serializable {
         this.address = address;
     }
 
-    public BigDecimal getLatitude() {
+    public long getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(BigDecimal latitude) {
+    public void setLatitude(long latitude) {
         this.latitude = latitude;
     }
 
-    public BigDecimal getLongitude() {
+    public long getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(BigDecimal longitude) {
+    public void setLongitude(long longitude) {
         this.longitude = longitude;
     }
 
-    public Integer getMaxOccupants() {
+    public int getMaxOccupants() {
         return maxOccupants;
     }
 
-    public void setMaxOccupants(Integer maxOccupants) {
+    public void setMaxOccupants(int maxOccupants) {
         this.maxOccupants = maxOccupants;
     }
 
-    public String getPrice() {
+    public long getArea() {
+        return area;
+    }
+
+    public void setArea(long area) {
+        this.area = area;
+    }
+
+    public long getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(long price) {
         this.price = price;
+    }
+
+    public String getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(String unitPrice) {
+        this.unitPrice = unitPrice;
     }
 
     @XmlTransient
@@ -157,20 +198,20 @@ public class Room implements Serializable {
         this.imageSet = imageSet;
     }
 
-    public User getUserId() {
-        return userId;
-    }
-
-    public void setUserId(User userId) {
-        this.userId = userId;
-    }
-
     public Landlordpost getLandlordpost() {
         return landlordpost;
     }
 
     public void setLandlordpost(Landlordpost landlordpost) {
         this.landlordpost = landlordpost;
+    }
+
+    public User getUserId() {
+        return userId;
+    }
+
+    public void setUserId(User userId) {
+        this.userId = userId;
     }
 
     @Override

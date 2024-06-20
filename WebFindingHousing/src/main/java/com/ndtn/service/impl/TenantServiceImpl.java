@@ -19,10 +19,10 @@ import org.springframework.stereotype.Service;
  * @author thanh
  */
 @Service
-public class TenantServiceImpl implements TenantService{
+public class TenantServiceImpl implements TenantService {
+
     @Autowired
     private TenantRepository tenantRepo;
-    
 
     @Override
     public List<Tenantpost> getPost(Map<String, String> params) {
@@ -34,8 +34,13 @@ public class TenantServiceImpl implements TenantService{
         Tenantpost p = new Tenantpost();
         p.setPostId(post);
         p.setAddress(params.get("address"));
-        p.setLatitude(BigDecimal.valueOf(Long.parseLong(params.get("latitude"))));
-        p.setLongitude(BigDecimal.valueOf(Long.parseLong(params.get("longitude"))));
+        p.setLatitude(Long.parseLong(params.get("latitude")));
+        p.setLongitude(Long.parseLong(params.get("longitude")));
+        p.setScope(Long.parseLong(params.get("scope")));
+        p.setMaxPrice(Long.parseLong(params.get("maxPrice")));
+        p.setMinPrice(Long.parseLong(params.get("minPrice")));
+        p.setArea(Long.parseLong(params.get("area")));
+        p.setMaxOccupants(Long.parseLong(params.get("maxoccupants")));
         return this.tenantRepo.addPost(p);
     }
 
@@ -48,5 +53,10 @@ public class TenantServiceImpl implements TenantService{
     public List<Tenantpost> getPostByUserId(int id) {
         return this.tenantRepo.getPostByUserId(id);
     }
-    
+
+    @Override
+    public boolean deletePostById(int id) {
+        return this.tenantRepo.deletePostById(id);
+    }
+
 }

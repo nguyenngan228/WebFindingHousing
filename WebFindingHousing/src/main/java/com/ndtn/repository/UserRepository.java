@@ -12,8 +12,10 @@ import com.ndtn.pojo.User;
  */
 public interface UserRepository {
     User getUserByUsername(String username);
+    boolean getActiveByUsername(String username);
     User getUserById(int id);
     boolean authUser(String username, String password);
+//    boolean authUser(String username, String password,boolean active);
     User addUser(User user);
     
 }
