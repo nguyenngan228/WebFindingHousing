@@ -34,13 +34,13 @@ public class TenantServiceImpl implements TenantService {
         Tenantpost p = new Tenantpost();
         p.setPostId(post);
         p.setAddress(params.get("address"));
-        p.setLatitude(Long.parseLong(params.get("latitude")));
-        p.setLongitude(Long.parseLong(params.get("longitude")));
-        p.setScope(Long.parseLong(params.get("scope")));
-        p.setMaxPrice(Long.parseLong(params.get("maxPrice")));
-        p.setMinPrice(Long.parseLong(params.get("minPrice")));
-        p.setArea(Long.parseLong(params.get("area")));
-        p.setMaxOccupants(Long.parseLong(params.get("maxoccupants")));
+        p.setLatitude(new BigDecimal(params.get("latitude")));
+        p.setLongitude(new BigDecimal(params.get("longitude")));
+        p.setScope(new BigDecimal(params.get("scope")));
+        p.setMaxPrice(new BigDecimal(params.get("maxPrice")));
+        p.setMinPrice(new BigDecimal(params.get("minPrice")));
+        p.setArea(new BigDecimal(params.get("area")));
+        p.setMaxOccupants(new BigDecimal(params.get("maxoccupants")));
         return this.tenantRepo.addPost(p);
     }
 

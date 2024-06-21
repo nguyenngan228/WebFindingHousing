@@ -6,6 +6,7 @@ package com.ndtn.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -42,8 +43,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Room.findByLongitude", query = "SELECT r FROM Room r WHERE r.longitude = :longitude"),
     @NamedQuery(name = "Room.findByMaxOccupants", query = "SELECT r FROM Room r WHERE r.maxOccupants = :maxOccupants"),
     @NamedQuery(name = "Room.findByArea", query = "SELECT r FROM Room r WHERE r.area = :area"),
-    @NamedQuery(name = "Room.findByPrice", query = "SELECT r FROM Room r WHERE r.price = :price"),
-    @NamedQuery(name = "Room.findByUnitPrice", query = "SELECT r FROM Room r WHERE r.unitPrice = :unitPrice")})
+    @NamedQuery(name = "Room.findByPrice", query = "SELECT r FROM Room r WHERE r.price = :price")})
 public class Room implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -65,11 +65,11 @@ public class Room implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "latitude")
-    private long latitude;
+    private BigDecimal latitude;
     @Basic(optional = false)
     @NotNull
     @Column(name = "longitude")
-    private long longitude;
+    private BigDecimal longitude;
     @Basic(optional = false)
     @NotNull
     @Column(name = "max_occupants")
@@ -77,16 +77,12 @@ public class Room implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "area")
-    private long area;
+    private BigDecimal area;
     @Basic(optional = false)
     @NotNull
     @Column(name = "price")
-    private long price;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 7)
-    @Column(name = "unit_price")
-    private String unitPrice;
+    private BigDecimal price;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "roomId")
     @JsonIgnore
     private Set<Image> imageSet;
@@ -105,7 +101,7 @@ public class Room implements Serializable {
         this.id = id;
     }
 
-    public Room(Integer id, String name, String address, long latitude, long longitude, int maxOccupants, long area, long price, String unitPrice) {
+    public Room(Integer id, String name, String address, BigDecimal latitude, BigDecimal longitude, int maxOccupants, BigDecimal area, BigDecimal price, String unitPrice) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -114,7 +110,6 @@ public class Room implements Serializable {
         this.maxOccupants = maxOccupants;
         this.area = area;
         this.price = price;
-        this.unitPrice = unitPrice;
     }
 
     public Integer getId() {
@@ -141,19 +136,19 @@ public class Room implements Serializable {
         this.address = address;
     }
 
-    public long getLatitude() {
+    public BigDecimal getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(long latitude) {
+    public void setLatitude(BigDecimal latitude) {
         this.latitude = latitude;
     }
 
-    public long getLongitude() {
+    public BigDecimal getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(long longitude) {
+    public void setLongitude(BigDecimal longitude) {
         this.longitude = longitude;
     }
 
@@ -165,28 +160,20 @@ public class Room implements Serializable {
         this.maxOccupants = maxOccupants;
     }
 
-    public long getArea() {
+    public BigDecimal getArea() {
         return area;
     }
 
-    public void setArea(long area) {
+    public void setArea(BigDecimal area) {
         this.area = area;
     }
 
-    public long getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(long price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
-    }
-
-    public String getUnitPrice() {
-        return unitPrice;
-    }
-
-    public void setUnitPrice(String unitPrice) {
-        this.unitPrice = unitPrice;
     }
 
     @XmlTransient

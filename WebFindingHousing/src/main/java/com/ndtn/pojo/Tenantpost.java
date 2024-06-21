@@ -6,6 +6,7 @@ package com.ndtn.pojo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -55,31 +56,31 @@ public class Tenantpost implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "latitude")
-    private long latitude;
+    private BigDecimal latitude;
     @Basic(optional = false)
     @NotNull
     @Column(name = "longitude")
-    private long longitude;
+    private BigDecimal longitude;
     @Basic(optional = false)
     @NotNull
     @Column(name = "scope")
-    private long scope;
+    private BigDecimal scope;
     @Basic(optional = false)
     @NotNull
     @Column(name = "area")
-    private long area;
+    private BigDecimal area;
     @Basic(optional = false)
     @NotNull
     @Column(name = "max_price")
-    private long maxPrice;
+    private BigDecimal maxPrice;
     @Basic(optional = false)
     @NotNull
     @Column(name = "min_price")
-    private long minPrice;
+    private BigDecimal minPrice;
     @Basic(optional = false)
     @NotNull
     @Column(name = "max_occupants")
-    private long maxOccupants;
+    private BigDecimal maxOccupants;
     @JoinColumn(name = "post_id", referencedColumnName = "id")
     @OneToOne(optional = false)
     @JsonProperty("post")
@@ -92,7 +93,7 @@ public class Tenantpost implements Serializable {
         this.id = id;
     }
 
-    public Tenantpost(Integer id, String address, long latitude, long longitude, long scope, long area, long maxPrice, long minPrice, long maxOccupants) {
+    public Tenantpost(Integer id, String address, BigDecimal latitude, BigDecimal longitude, BigDecimal scope, BigDecimal area, BigDecimal maxPrice, BigDecimal minPrice, BigDecimal maxOccupants) {
         this.id = id;
         this.address = address;
         this.latitude = latitude;
@@ -120,59 +121,59 @@ public class Tenantpost implements Serializable {
         this.address = address;
     }
 
-    public long getLatitude() {
+    public BigDecimal getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(long latitude) {
+    public void setLatitude(BigDecimal latitude) {
         this.latitude = latitude;
     }
 
-    public long getLongitude() {
+    public BigDecimal getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(long longitude) {
+    public void setLongitude(BigDecimal longitude) {
         this.longitude = longitude;
     }
 
-    public long getScope() {
+    public BigDecimal getScope() {
         return scope;
     }
 
-    public void setScope(long scope) {
+    public void setScope(BigDecimal scope) {
         this.scope = scope;
     }
 
-    public long getArea() {
+    public BigDecimal getArea() {
         return area;
     }
 
-    public void setArea(long area) {
+    public void setArea(BigDecimal area) {
         this.area = area;
     }
 
-    public long getMaxPrice() {
+    public BigDecimal getMaxPrice() {
         return maxPrice;
     }
 
-    public void setMaxPrice(long maxPrice) {
+    public void setMaxPrice(BigDecimal maxPrice) {
         this.maxPrice = maxPrice;
     }
 
-    public long getMinPrice() {
+    public BigDecimal getMinPrice() {
         return minPrice;
     }
 
-    public void setMinPrice(long minPrice) {
+    public void setMinPrice(BigDecimal minPrice) {
         this.minPrice = minPrice;
     }
 
-    public long getMaxOccupants() {
+    public BigDecimal getMaxOccupants() {
         return maxOccupants;
     }
 
-    public void setMaxOccupants(long maxOccupants) {
+    public void setMaxOccupants(BigDecimal maxOccupants) {
         this.maxOccupants = maxOccupants;
     }
 
