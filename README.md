@@ -14,4 +14,4 @@ This project supports finding housing
   + Find rooms flexibly based on criteria, address (district, commune, district), number of residents, price,...
 - Admin
   + System-wide data management
-  + Perform statistical reporting
+  + Statistics and reports
