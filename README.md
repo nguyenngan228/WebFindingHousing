@@ -1,5 +1,5 @@
 # WebFindingHousing 
-This project supports finding housing
+This project supports finding housing help tenant find a housing
 
 # Task
 - Register, login user, CRUD the basic function
